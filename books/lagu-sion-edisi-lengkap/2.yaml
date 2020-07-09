@@ -1,0 +1,32 @@
+number: 2
+title: Hai Seg'nap Ciptaan Tuhan
+verses:
+  - contents: |
+      Hai seg’nap ciptaan Tuhan
+      Nyanyikan lagu pujian
+      Puji Tuhan, Haleluya
+      Pancaran sinar mentari
+      Cahaya bulan berseri
+  - contents: |
+      Desiran angin menghembus
+      Awan bergulung menembus
+      Puji Tuhan, Haleluya
+      Di kala fajar merekah
+      Dan waktu senja nyanyilah 
+  - contents: |
+      Aliran air yang jernih
+      Menyanyikan lagu kasih
+      Puji Tuhan, Haleluya
+      Bagai api yang membara
+      Dan menghangatkan udara 
+  - contents: |
+      Sembah sujudlah pada-Nya
+      Datang dan t’rima berkat-Nya
+      Puji Tuhan, Haleluya
+      Puji Bapa dan Putra-Nya
+      Puji Roh Kudus, serta-Nya
+reff:
+  contents: |
+    Puji Tuhan, Puji Tuhan
+    Haleluya, haleluya, haleluya
+bookID: 2
