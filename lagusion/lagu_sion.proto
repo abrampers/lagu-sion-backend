@@ -28,7 +28,7 @@ message ListSongsRequest {
 }
 
 message ListSongResponse {
-  Song songs = 1;
+  repeated Song songs = 1;
 }
 
 service LaguSionService {
