@@ -3,9 +3,8 @@ package main
 import (
 	// "encoding/json"
 	"fmt"
-	"io/ioutil"
 
-	"github.com/ghodss/yaml"
+	"github.com/abrampers/lagu-sion-backend/models"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
@@ -19,8 +18,8 @@ func main() {
 	}
 	defer db.Close()
 
-	db.AutoMigrate(&Book{}, &Song{}, &Verse{})
-
+	// db.AutoMigrate(&Book{}, &Song{}, &Verse{})
+	//
 	// song := &Song{
 	// 	Number: 1,
 	// 	Title:  "Ke Pada Allah Bri Puji",
@@ -42,12 +41,16 @@ func main() {
 	//
 	// db.Create(&song)
 
-	file, _ := ioutil.ReadFile("books/lagu-sion/1.yaml")
+	// file, _ := ioutil.ReadFile("books/lagu-sion/1.yaml")
+	//
+	// json, err := yaml.YAMLToJSON(file)
+	// if err != nil {
+	// 	fmt.Printf("err: %v\n", err)
+	// 	return
+	// }
+	// fmt.Println(string(json))
+	var songs []models.Song
+	db.Set("gorm:auto_preload", true).Find(&songs)
 
-	json, err := yaml.YAMLToJSON(file)
-	if err != nil {
-		fmt.Printf("err: %v\n", err)
-		return
-	}
-	fmt.Println(string(json))
+	fmt.Println(songs)
 }
