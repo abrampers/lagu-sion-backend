@@ -10,7 +10,6 @@ import (
 
 	pb "github.com/abrampers/lagu-sion-backend/lagusion"
 	"github.com/abrampers/lagu-sion-backend/models"
-	empty "github.com/golang/protobuf/ptypes/empty"
 	"google.golang.org/grpc"
 
 	"github.com/jinzhu/gorm"
@@ -45,17 +44,21 @@ type laguSionServer struct {
 	db *gorm.DB
 }
 
-func (s *laguSionServer) ListAllSongs(ctx context.Context, _ *empty.Empty) (*pb.ListSongResponse, error) {
+func (s *laguSionServer) ListSongs(ctx context.Context, request *pb.ListSongRequest) (*pb.ListSongResponse, error) {
 	var songs []models.Song
-	s.db.Find(&songs)
+	var db *gorm.DB
 
-	return &pb.ListSongResponse{Songs: convert(songs)}, nil
-}
+	if request.SortOptions == pb.SortOptions_NUMBER {
+		db = s.db.Order("number")
+	} else if request.SortOptions == pb.SortOptions_ALPHABET {
+		db = s.db.Order("title")
+	}
 
-func (s *laguSionServer) ListSongs(ctx context.Context, request *pb.ListSongsRequest) (*pb.ListSongResponse, error) {
-	var songs []models.Song
-	s.db.Where(&models.Song{BookId: uint32(request.SongBook)}).Find(&songs)
-
+	if request.SongBook == pb.SongBook_ALL {
+		db.Find(&songs)
+	} else {
+		db.Where(&models.Song{BookId: uint32(request.SongBook)}).Find(&songs)
+	}
 	return &pb.ListSongResponse{Songs: convert(songs)}, nil
 }
 

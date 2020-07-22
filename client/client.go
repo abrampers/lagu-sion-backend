@@ -6,7 +6,6 @@ import (
 	"log"
 
 	pb "github.com/abrampers/lagu-sion-backend/lagusion"
-	empty "github.com/golang/protobuf/ptypes/empty"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/testdata"
@@ -44,15 +43,24 @@ func main() {
 
 	ctx := context.Background()
 	client := pb.NewLaguSionServiceClient(conn)
-	resp, err := client.ListAllSongs(ctx, &empty.Empty{})
+	resp, err := client.ListSongs(ctx, &pb.ListSongRequest{SongBook: pb.SongBook_ALL})
 	if err != nil {
-		log.Fatalf("SayHello failed: %v", err)
+		log.Fatalf("ListSongs failed: %v", err)
+	}
+	log.Printf("Response: %+v", resp)
+	resp, err = client.ListSongs(ctx, &pb.ListSongRequest{SongBook: pb.SongBook_ALL, SortOptions: pb.SortOptions_ALPHABET})
+	if err != nil {
+		log.Fatalf("ListSongs failed: %v", err)
 	}
 	log.Printf("Response: %+v", resp)
 
-	resp, err = client.ListSongs(ctx, &pb.ListSongsRequest{SongBook: pb.SongBook_LAGU_SION_EDISI_LENGKAP})
+	resp, err = client.ListSongs(ctx, &pb.ListSongRequest{SongBook: pb.SongBook_LAGU_SION_EDISI_LENGKAP})
 	if err != nil {
-		log.Fatalf("SayHello failed: %v", err)
+		log.Fatalf("ListSongs failed: %v", err)
+	}
+	resp, err = client.ListSongs(ctx, &pb.ListSongRequest{SongBook: pb.SongBook_LAGU_SION_EDISI_LENGKAP, SortOptions: pb.SortOptions_ALPHABET})
+	if err != nil {
+		log.Fatalf("ListSongs failed: %v", err)
 	}
 	log.Printf("Response: %+v", resp)
 }
