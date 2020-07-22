@@ -49,9 +49,9 @@ func (s *laguSionServer) ListSongs(ctx context.Context, request *pb.ListSongRequ
 	var db *gorm.DB
 
 	if request.SortOptions == pb.SortOptions_NUMBER {
-		db = s.db.Order("number")
+		db = s.db.Order("book_id, number")
 	} else if request.SortOptions == pb.SortOptions_ALPHABET {
-		db = s.db.Order("title")
+		db = s.db.Order("book_id, title")
 	}
 
 	if request.SongBook == pb.SongBook_ALL {
