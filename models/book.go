@@ -2,37 +2,42 @@ package models
 
 import (
 	"github.com/abrampers/lagu-sion-backend/lagusion"
-	"log"
+	"github.com/google/uuid"
 )
 
+var LaguSionBook Book = Book{Base: Base{Id: uuid.New()}, ShortName: "LS", LongName: "Lagu Sion"}
+var LaguSionEdisiLengkapBook Book = Book{Base: Base{Id: uuid.New()}, ShortName: "LSEL", LongName: "Lagu Sion Edisi Lengkap"}
+
 type Book struct {
-	Id        uint32 `gorm:"primary_key"`
+	Base
 	ShortName string
 	LongName  string
 }
 
-func LaguSionSongBook(id uint32) lagusion.SongBook {
-	if id == uint32(lagusion.SongBook_ALL) {
-		return lagusion.SongBook_ALL
-	} else if id == uint32(lagusion.SongBook_LAGU_SION) {
-		return lagusion.SongBook_LAGU_SION
-	} else if id == uint32(lagusion.SongBook_LAGU_SION_EDISI_LENGKAP) {
-		return lagusion.SongBook_LAGU_SION_EDISI_LENGKAP
+func GetBook(id uint32) Book {
+	if id == 1 {
+		return LaguSionBook
+	} else if id == 2 {
+		return LaguSionEdisiLengkapBook
 	} else {
-		log.Println("Invalid SongBook enum")
-		return lagusion.SongBook_ALL
+		return LaguSionBook
 	}
 }
 
-func (b Book) LaguSionSongBook() lagusion.SongBook {
-	if b.Id == uint32(lagusion.SongBook_ALL) {
-		return lagusion.SongBook_ALL
-	} else if b.Id == uint32(lagusion.SongBook_LAGU_SION) {
-		return lagusion.SongBook_LAGU_SION
-	} else if b.Id == uint32(lagusion.SongBook_LAGU_SION_EDISI_LENGKAP) {
-		return lagusion.SongBook_LAGU_SION_EDISI_LENGKAP
+func LaguSionSongBook(id uint32) *lagusion.Book {
+	if id == 1 {
+		return LaguSionBook.LaguSionSongBook()
+	} else if id == 2 {
+		return LaguSionEdisiLengkapBook.LaguSionSongBook()
 	} else {
-		log.Println("Invalid SongBook enum")
-		return lagusion.SongBook_ALL
+		return nil
+	}
+}
+
+func (b Book) LaguSionSongBook() *lagusion.Book {
+	return &lagusion.Book{
+		Id:        &lagusion.UUID{Value: b.Id.String()},
+		ShortName: b.ShortName,
+		LongName:  b.LongName,
 	}
 }

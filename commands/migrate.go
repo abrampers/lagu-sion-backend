@@ -56,8 +56,8 @@ func main() {
 		"books/lagu-sion-edisi-lengkap",
 	}
 
-	db.Create(&models.Book{Id: 1, ShortName: "LS", LongName: "Lagu Sion"})
-	db.Create(&models.Book{Id: 2, ShortName: "LSEL", LongName: "Lagu Sion Edisi Lengkap"})
+	db.Create(&models.LaguSionBook)
+	db.Create(&models.LaguSionEdisiLengkapBook)
 
 	var songs []models.Song
 

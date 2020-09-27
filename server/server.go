@@ -10,10 +10,12 @@ import (
 
 	pb "github.com/abrampers/lagu-sion-backend/lagusion"
 	"github.com/abrampers/lagu-sion-backend/models"
-	"google.golang.org/grpc"
-
+	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 var (
@@ -54,10 +56,14 @@ func (s *laguSionServer) ListSongs(ctx context.Context, request *pb.ListSongRequ
 		db = s.db.Order("book_id, title")
 	}
 
-	if request.SongBook == pb.SongBook_ALL {
+	if request.BookId == nil {
 		db.Find(&songs)
 	} else {
-		db.Where(&models.Song{BookId: uint32(request.SongBook)}).Find(&songs)
+		uuid, err := uuid.Parse(request.BookId.GetValue())
+		if err != nil {
+			return nil, status.Errorf(codes.InvalidArgument, "Invalid UUID string.")
+		}
+		db.Where(&models.Song{BookId: uuid}).Find(&songs)
 	}
 	return &pb.ListSongResponse{Songs: convert(songs)}, nil
 }

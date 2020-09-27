@@ -2,17 +2,16 @@ package models
 
 import (
 	"github.com/abrampers/lagu-sion-backend/lagusion"
-	"strings"
+	"github.com/google/uuid"
 )
 
 type Verse struct {
-	Id       uint   `gorm:"primary_key"`
+	Base
 	Contents string `json:"contents"`
-	SongID   uint
+	VersesOf uuid.UUID
+	ReffOf   uuid.UUID
 }
 
 func (v Verse) LaguSionVerse() *lagusion.Verse {
-	return &lagusion.Verse{Contents: strings.FieldsFunc(v.Contents, func(c rune) bool {
-		return c == '\n'
-	})}
+	return &lagusion.Verse{Contents: v.Contents}
 }
